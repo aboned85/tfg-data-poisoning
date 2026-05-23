@@ -35,3 +35,32 @@ tfg-data-poisoning/
         init.sql
     README.md
 ```
+
+## Como ejecutar el código
+
+1. Instala Docker Desktop, Python 3.11, Java 17 y Pyspark
+2. Levanta la infraestructura:
+
+docker compose up -d
+
+3. Instala las dependecias:
+
+cd producer && pip install -r requirements.txt
+cd ../processor && pip install -r requirements.txt
+
+4. Arranca el producer:
+
+cd producer
+python producer.py
+
+5. Arranca el procesador:
+
+cd processor
+python spark_job.py
+
+6. Accede a Grafana a través de la url http://localhost:3000
+7. Importa el dashboard
+
+## Autor
+
+Alberto Boned Carrasco
