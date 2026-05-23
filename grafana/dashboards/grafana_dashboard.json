@@ -1,0 +1,347 @@
+{
+  "title": "Dashboard Detección de Data Poisoning",
+  "tags": ["tfg", "data-poisoning"],
+  "timezone": "browser",
+  "refresh": "5s",
+  "time": {
+    "from": "now-15m",
+    "to": "now"
+  },
+  "panels": [
+    {
+      "id": 1,
+      "title": "Tasa de Anomalías (%)",
+      "type": "gauge",
+      "gridPos": { "h": 8, "w": 6, "x": 0, "y": 0 },
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "processor_kpi_anomaly_rate * 100",
+          "legendFormat": "Tasa Anomalías"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "min": 0,
+          "max": 100,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "yellow", "value": 10 },
+              { "color": "red", "value": 20 }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 2,
+      "title": "Registros Procesados",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 6, "x": 6, "y": 0 },
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "processor_records_processed_total",
+          "legendFormat": "Total"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "steps": [
+              { "color": "blue", "value": null }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 3,
+      "title": "Registros Enviados (Producer)",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 6, "x": 6, "y": 4 },
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "sum(producer_records_sent_total)",
+          "legendFormat": "Total Enviados"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "steps": [
+              { "color": "purple", "value": null }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 4,
+      "title": "Volumen por Ventana",
+      "type": "stat",
+      "gridPos": { "h": 8, "w": 6, "x": 12, "y": 0 },
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "processor_kpi_volume",
+          "legendFormat": "Registros/Ventana"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "steps": [
+              { "color": "green", "value": null }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 5,
+      "title": "Alertas Activas",
+      "type": "stat",
+      "gridPos": { "h": 8, "w": 6, "x": 18, "y": 0 },
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "sum(processor_anomalies_detected_total)",
+          "legendFormat": "Total Alertas"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "orange", "value": 5 },
+              { "color": "red", "value": 15 }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 6,
+      "title": "Z-Score Máximo por Campo",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "processor_kpi_zscore_max{field=\"precio\"}",
+          "legendFormat": "Precio"
+        },
+        {
+          "expr": "processor_kpi_zscore_max{field=\"cantidad\"}",
+          "legendFormat": "Cantidad"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 10
+          }
+        }
+      }
+    },
+    {
+      "id": 7,
+      "title": "Detección de Drift por Campo",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "processor_kpi_drift{field=\"precio\"}",
+          "legendFormat": "Drift Precio"
+        },
+        {
+          "expr": "processor_kpi_drift{field=\"cantidad\"}",
+          "legendFormat": "Drift Cantidad"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 10
+          }
+        }
+      }
+    },
+    {
+      "id": 8,
+      "title": "Precio por Usuario (Tiempo Real)",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 16 },
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "producer_last_price",
+          "legendFormat": "{{id_usuario}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyEUR",
+          "custom": {
+            "lineWidth": 1,
+            "fillOpacity": 5
+          }
+        }
+      }
+    },
+    {
+      "id": 9,
+      "title": "Cantidad por Usuario (Tiempo Real)",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 16 },
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "producer_last_quantity",
+          "legendFormat": "{{id_usuario}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "lineWidth": 1,
+            "fillOpacity": 5
+          }
+        }
+      }
+    },
+    {
+      "id": 10,
+      "title": "Ataques por Tipo (Total)",
+      "type": "piechart",
+      "gridPos": { "h": 8, "w": 8, "x": 0, "y": 24 },
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "producer_attacks_total",
+          "legendFormat": "{{tipo_ataque}}"
+        }
+      ],
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "values": ["value", "percent"]
+        },
+        "pieType": "donut"
+      }
+    },
+    {
+      "id": 11,
+      "title": "Anomalías Detectadas por KPI",
+      "type": "bargauge",
+      "gridPos": { "h": 8, "w": 8, "x": 8, "y": 24 },
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "processor_anomalies_detected_total",
+          "legendFormat": "{{kpi_name}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "orange", "value": 3 },
+              { "color": "red", "value": 10 }
+            ]
+          }
+        }
+      },
+      "options": {
+        "orientation": "horizontal",
+        "displayMode": "gradient"
+      }
+    },
+    {
+      "id": 12,
+      "title": "Latencia de Envío del Producer",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 8, "x": 16, "y": 24 },
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "rate(producer_send_latency_seconds_sum[1m]) / rate(producer_send_latency_seconds_count[1m])",
+          "legendFormat": "Latencia Media"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 20
+          }
+        }
+      }
+    },
+    {
+      "id": 13,
+      "title": "Tasa de Anomalías en el Tiempo",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 32 },
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "processor_kpi_anomaly_rate * 100",
+          "legendFormat": "Tasa Anomalías %"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 15,
+            "thresholdsStyle": { "mode": "line" }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "red", "value": 20 }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 14,
+      "title": "Latencia de Procesamiento por Ventana",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 32 },
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "rate(processor_window_latency_seconds_sum[5m]) / rate(processor_window_latency_seconds_count[5m])",
+          "legendFormat": "Latencia Media Ventana"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 15
+          }
+        }
+      }
+    }
+  ],
+  "schemaVersion": 38
+}
